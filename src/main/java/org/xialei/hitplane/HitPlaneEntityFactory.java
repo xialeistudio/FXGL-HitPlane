@@ -8,14 +8,15 @@ import com.almasb.fxgl.entity.EntityFactory;
 import com.almasb.fxgl.entity.SpawnData;
 import com.almasb.fxgl.entity.Spawns;
 import javafx.geometry.Point2D;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 
 public class HitPlaneEntityFactory implements EntityFactory {
 
     @Spawns("BG")
     public Entity spawnBG(SpawnData data) {
-
         return FXGL.entityBuilder(data)
-                .view("background.png")
+                .view(new Rectangle(FXGL.getAppWidth(), FXGL.getAppHeight(), Color.color((double) 0xc3 / 255, (double) 0xc8 / 255, (double) 0xc9 / 255)))
                 .build();
     }
 

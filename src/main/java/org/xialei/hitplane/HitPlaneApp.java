@@ -9,7 +9,6 @@ import com.almasb.fxgl.ui.FontType;
 import java.util.Map;
 import javafx.geometry.Point2D;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
 
@@ -21,10 +20,13 @@ public class HitPlaneApp extends GameApplication {
 
     @Override
     protected void initSettings(GameSettings settings) {
-        settings.setWidth(480);
+        settings.setWidth(800);
         settings.setHeight(800);
         settings.setTitle("HitPlane");
         settings.setVersion("1.0");
+        settings.setFontText("lcd.ttf");
+        settings.setMainMenuEnabled(true);
+        settings.setGameMenuEnabled(true);
     }
 
     @Override
@@ -55,7 +57,8 @@ public class HitPlaneApp extends GameApplication {
      * @param position
      */
     private void spawnFloatingText(String content, Point2D position, Color color) {
-        Text node = FXGL.getUIFactoryService().newText(content, color, 16);
+        Text node = FXGL.addText(content, position.getX(), position.getY());
+        node.setFill(color);
         FXGL.animationBuilder()
                 .onFinished(() -> FXGL.removeUINode(node))
                 .duration(Duration.seconds(0.5))
@@ -63,8 +66,6 @@ public class HitPlaneApp extends GameApplication {
                 .from(position)
                 .to(new Point2D(position.getX(), position.getY() - 40))
                 .buildAndPlay();
-
-        FXGL.addUINode(node, position.getX(), position.getY());
     }
 
     @Override

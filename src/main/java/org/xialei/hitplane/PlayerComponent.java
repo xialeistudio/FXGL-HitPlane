@@ -2,26 +2,25 @@ package org.xialei.hitplane;
 
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.component.Component;
-import com.almasb.fxgl.time.TimerAction;
+import com.almasb.fxgl.time.LocalTimer;
 import javafx.util.Duration;
 
 public class PlayerComponent extends Component {
 
     private final double fireSpeed;
-    private TimerAction fireTimerAction;
+    private final LocalTimer timer;
 
     public PlayerComponent(double fireSpeed) {
         this.fireSpeed = fireSpeed;
+        this.timer = FXGL.newLocalTimer();
     }
 
     @Override
-    public void onAdded() {
-        fireTimerAction = FXGL.getGameTimer().runAtInterval(this::fire, Duration.seconds(fireSpeed));
-    }
-
-    @Override
-    public void onRemoved() {
-        fireTimerAction.expire();
+    public void onUpdate(double tpf) {
+        if (timer.elapsed(Duration.seconds(fireSpeed))) {
+            fire();
+            timer.capture();
+        }
     }
 
     /**
