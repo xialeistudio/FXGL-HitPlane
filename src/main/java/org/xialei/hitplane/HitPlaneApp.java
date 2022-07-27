@@ -9,6 +9,7 @@ import com.almasb.fxgl.ui.FontType;
 import java.util.Map;
 import javafx.geometry.Point2D;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
 
@@ -35,11 +36,11 @@ public class HitPlaneApp extends GameApplication {
     protected void initPhysics() {
         FXGL.onCollisionBegin(Type.PLAYER, Type.ENEMY_BULLET, (player, enemyBullet) -> {
             enemyBullet.removeFromWorld();
-            spawnFloatingText("-100", player.getPosition());
+            spawnFloatingText("-100", player.getPosition(), Color.RED);
             FXGL.inc("score", -100);
         });
         FXGL.onCollisionBegin(Type.ENEMY, Type.PLAYER_BULLET, (enemy, playerBullet) -> {
-            spawnFloatingText("+10", enemy.getPosition());
+            spawnFloatingText("+10", enemy.getPosition(), Color.GREEN);
             enemy.removeFromWorld();
             playerBullet.removeFromWorld();
             FXGL.inc("score", 10);
@@ -53,8 +54,17 @@ public class HitPlaneApp extends GameApplication {
      * @param content
      * @param position
      */
-    private void spawnFloatingText(String content, Point2D position) {
-//        Text node = FXGL.getUIFactoryService().newText(content, Color.BLACK, 16);
+    private void spawnFloatingText(String content, Point2D position, Color color) {
+        Text node = FXGL.getUIFactoryService().newText(content, color, 16);
+        FXGL.animationBuilder()
+                .onFinished(() -> FXGL.removeUINode(node))
+                .duration(Duration.seconds(0.5))
+                .translate(node)
+                .from(position)
+                .to(new Point2D(position.getX(), position.getY() - 40))
+                .buildAndPlay();
+
+        FXGL.addUINode(node, position.getX(), position.getY());
     }
 
     @Override
